@@ -1,0 +1,15 @@
+type;id;name;category;latitude;longitude;website;phone
+NETWORK;1;Кофейня «Правда»;CAFE;55.0302;82.9204;https://pravda-coffee.ru;+7 383 000-00-01
+NETWORK;2;Гостиница «Новосибирск»;HOTEL;55.0357;82.8977;https://hotel-nsk.example;+7 383 000-00-02
+PLACE;3;Театр оперы и балета;THEATRE;55.0306;82.9236;;
+PLACE;4;НГТУ, 1 корпус;EDUCATION;54.9866;82.9051;;
+MODERATED;5;Центральный парк;PARK;55.0420;82.9160;;
+MODERATED;6;Краеведческий музей;MUSEUM;55.0295;82.9215;;
+NETWORK;7;Книжный магазин;SHOP;55.0280;82.9300;https://books.example;
+PLACE;8;Сломанная строка без полей;OTHER;55.03
+PLACE;9;Кривая широта;OTHER;55,03a;82.92;;
+PLACE;10;Неизвестная категория;ZOO;55.05;82.95;;
+PLACE;11;Широта вне диапазона;OTHER;95.0;82.95;;
+NETWORK;12;Сайт без протокола;CAFE;55.01;82.93;cafe.ru;
+PLACE;3;Дубль id;OTHER;55.00;82.90;;
+ROBOT;13;Неизвестный тип;OTHER;55.00;82.90;;
