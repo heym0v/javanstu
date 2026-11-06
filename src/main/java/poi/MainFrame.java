@@ -41,10 +41,16 @@ public class MainFrame extends JFrame {
         JButton loadButton = new JButton("Загрузить CSV");
         JButton saveButton = new JButton("Сохранить CSV");
         JButton addButton = new JButton("Добавить");
+        JButton deleteButton = new JButton("Удалить");
+        JButton findButton = new JButton("Найти");
+        JButton rangeButton = new JButton("В прямоугольнике");
         loadButton.addActionListener(e -> loadFile());
         saveButton.addActionListener(e -> saveFile());
         addButton.addActionListener(e -> addPlace());
         editButton.addActionListener(e -> editPlace());
+        deleteButton.addActionListener(e -> deletePlace());
+        findButton.addActionListener(e -> findPlace());
+        rangeButton.addActionListener(e -> findInRectangle());
         cancelButton.addActionListener(e -> currentTask.cancel(false));
         editButton.setEnabled(false);
         cancelButton.setEnabled(false);
@@ -54,6 +60,9 @@ public class MainFrame extends JFrame {
         buttons.add(saveButton);
         buttons.add(addButton);
         buttons.add(editButton);
+        buttons.add(deleteButton);
+        buttons.add(findButton);
+        buttons.add(rangeButton);
 
         // Нижняя строка: полоса прогресса и кнопка отмены фоновой задачи
         JPanel bottom = new JPanel(new BorderLayout());
@@ -222,6 +231,85 @@ public class MainFrame extends JFrame {
                 refreshTable();
             }
         }
+    }
+
+    private void deletePlace() {
+        Place selected = getSelectedPlace();
+        if (selected == null) {
+            showError("Сначала выберите место в таблице");
+            return;
+        }
+        int answer = JOptionPane.showConfirmDialog(this, "Удалить «" + selected.getName() + "»?");
+        if (answer == JOptionPane.YES_OPTION) {
+            tree.remove(selected);
+            refreshTable();
+        }
+    }
+
+    private void findPlace() {
+        double[] v = askNumbers("Поиск по координатам", new String[]{"Широта:", "Долгота:"});
+        if (v == null) {
+            return;
+        }
+        Place found = tree.find(v[0], v[1]);
+        treePanel.repaint(); // показать путь поиска красным
+        if (found == null) {
+            JOptionPane.showMessageDialog(this, "Место с такими координатами не найдено");
+        } else {
+            selectRow(found);
+            JOptionPane.showMessageDialog(this, "Найдено: " + found.getName());
+        }
+    }
+
+    private void findInRectangle() {
+        double[] v = askNumbers("Поиск в прямоугольнике",
+                new String[]{"Широта от:", "Широта до:", "Долгота от:", "Долгота до:"});
+        if (v == null) {
+            return;
+        }
+        SimpleArray<Place> found = tree.range(v[0], v[1], v[2], v[3]);
+        treePanel.repaint(); // показать посещённые узлы красным
+        String message = "Найдено мест: " + found.size();
+        for (int i = 0; i < found.size() && i < MAX_LINES_IN_DIALOG; i++) {
+            message += "\n" + found.get(i).getName();
+        }
+        JOptionPane.showMessageDialog(this, message);
+    }
+
+    /** Выделяет в таблице строку с этим местом и прокручивает к ней. */
+    private void selectRow(Place place) {
+        for (int i = 0; i < shown.size(); i++) {
+            if (shown.get(i) == place) {
+                table.setRowSelectionInterval(i, i);
+                table.scrollRectToVisible(table.getCellRect(i, 0, true));
+                return;
+            }
+        }
+    }
+
+    /** Диалог с несколькими числовыми полями. Возвращает числа или null (отмена / ошибка ввода). */
+    private double[] askNumbers(String title, String[] labels) {
+        JPanel panel = new JPanel(new GridLayout(0, 2));
+        JTextField[] fields = new JTextField[labels.length];
+        for (int i = 0; i < labels.length; i++) {
+            fields[i] = new JTextField();
+            panel.add(new JLabel(labels[i]));
+            panel.add(fields[i]);
+        }
+        int answer = JOptionPane.showConfirmDialog(this, panel, title, JOptionPane.OK_CANCEL_OPTION);
+        if (answer != JOptionPane.OK_OPTION) {
+            return null;
+        }
+        double[] values = new double[labels.length];
+        try {
+            for (int i = 0; i < labels.length; i++) {
+                values[i] = Double.parseDouble(fields[i].getText());
+            }
+        } catch (NumberFormatException e) {
+            showError("Нужно ввести числа, например 55.03");
+            return null;
+        }
+        return values;
     }
 
     /** Новый номер: на 1 больше самого большого из имеющихся. */
