@@ -84,6 +84,40 @@ public class KdTree<T extends Place> {
         return null;
     }
 
+    /**
+     * Все места в прямоугольнике [minLat; maxLat] x [minLon; maxLon].
+     * Ветку дерева пропускаем, если прямоугольник точно не может в неё попасть.
+     */
+    public SimpleArray<T> range(double minLat, double maxLat, double minLon, double maxLon) {
+        visited = new SimpleArray<>();
+        SimpleArray<T> result = new SimpleArray<>();
+        range(root, 0, minLat, maxLat, minLon, maxLon, result);
+        return result;
+    }
+
+    // Рекурсия: метод вызывает сам себя для левого и правого ребёнка
+    private void range(Node<T> node, int depth, double minLat, double maxLat,
+                       double minLon, double maxLon, SimpleArray<T> result) {
+        if (node == null) {
+            return;
+        }
+        visited.add(node.value);
+        double lat = node.value.getLatitude();
+        double lon = node.value.getLongitude();
+        if (lat >= minLat && lat <= maxLat && lon >= minLon && lon <= maxLon) {
+            result.add(node.value);
+        }
+        double nodeKey = key(lat, lon, depth);
+        double min = key(minLat, minLon, depth); // нижняя граница по нужной оси
+        double max = key(maxLat, maxLon, depth); // верхняя граница по нужной оси
+        if (min < nodeKey) {   // слева лежат значения < nodeKey
+            range(node.left, depth + 1, minLat, maxLat, minLon, maxLon, result);
+        }
+        if (max >= nodeKey) {  // справа лежат значения >= nodeKey
+            range(node.right, depth + 1, minLat, maxLat, minLon, maxLon, result);
+        }
+    }
+
     public int size() {
         return size;
     }
