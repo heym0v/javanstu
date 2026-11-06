@@ -1,5 +1,13 @@
 package poi;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Чтение и запись мест в CSV-файл.
  * Формат строки (8 полей через точку с запятой):
@@ -67,5 +75,39 @@ public class CsvFile {
         return p.getType() + SEPARATOR + p.getId() + SEPARATOR + p.getName() + SEPARATOR
                 + p.getCategory().name() + SEPARATOR + p.getLatitude() + SEPARATOR + p.getLongitude()
                 + SEPARATOR + website + SEPARATOR + phone;
+    }
+
+    /**
+     * Читает весь файл. Битые строки пропускаются, а описание ошибки
+     * попадает в список errors, чтобы окно показало его пользователю.
+     * IOException (файла нет, нет доступа) пробрасываем наверх — его покажет окно.
+     */
+    public static ArrayList<Place> load(File file, ArrayList<String> errors) throws IOException {
+        List<String> lines = Files.readAllLines(file.toPath(), StandardCharsets.UTF_8);
+        ArrayList<Place> places = new ArrayList<>();
+        // i = 1: строку 0 пропускаем, это заголовок
+        for (int i = 1; i < lines.size(); i++) {
+            String line = lines.get(i);
+            if (line.isBlank()) {
+                continue; // пустые строки просто пропускаем
+            }
+            try {
+                places.add(parseLine(line));
+            } catch (CsvException e) {
+                errors.add("Строка " + (i + 1) + ": " + e.getCode() + " — " + e.getMessage());
+            }
+        }
+        return places;
+    }
+
+    /** Записывает все места в файл: сначала заголовок, потом по строке на место. */
+    public static void save(File file, ArrayList<Place> places) throws IOException {
+        // try-with-resources: файл закроется сам, даже если будет ошибка
+        try (PrintWriter out = new PrintWriter(file, StandardCharsets.UTF_8)) {
+            out.println(HEADER);
+            for (Place p : places) {
+                out.println(toLine(p));
+            }
+        }
     }
 }
