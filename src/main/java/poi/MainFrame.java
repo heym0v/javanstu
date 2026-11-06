@@ -44,6 +44,7 @@ public class MainFrame extends JFrame {
         JButton deleteButton = new JButton("Удалить");
         JButton findButton = new JButton("Найти");
         JButton rangeButton = new JButton("В прямоугольнике");
+        JButton generateButton = new JButton("Сгенерировать");
         loadButton.addActionListener(e -> loadFile());
         saveButton.addActionListener(e -> saveFile());
         addButton.addActionListener(e -> addPlace());
@@ -51,6 +52,7 @@ public class MainFrame extends JFrame {
         deleteButton.addActionListener(e -> deletePlace());
         findButton.addActionListener(e -> findPlace());
         rangeButton.addActionListener(e -> findInRectangle());
+        generateButton.addActionListener(e -> generatePlaces());
         cancelButton.addActionListener(e -> currentTask.cancel(false));
         editButton.setEnabled(false);
         cancelButton.setEnabled(false);
@@ -63,6 +65,7 @@ public class MainFrame extends JFrame {
         buttons.add(deleteButton);
         buttons.add(findButton);
         buttons.add(rangeButton);
+        buttons.add(generateButton);
 
         // Нижняя строка: полоса прогресса и кнопка отмены фоновой задачи
         JPanel bottom = new JPanel(new BorderLayout());
@@ -310,6 +313,51 @@ public class MainFrame extends JFrame {
             return null;
         }
         return values;
+    }
+
+    /** Генерация случайных мест в фоне, с прогрессом и возможностью отмены. */
+    private void generatePlaces() {
+        String text = JOptionPane.showInputDialog(this, "Сколько мест создать?", "10000");
+        if (text == null) {
+            return;
+        }
+        int count;
+        try {
+            count = Integer.parseInt(text.trim());
+        } catch (NumberFormatException e) {
+            showError("Нужно ввести целое число");
+            return;
+        }
+        if (count <= 0) {
+            showError("Число должно быть больше нуля");
+            return;
+        }
+        int firstId = nextId();
+
+        SwingWorker<Integer, Void> task = new SwingWorker<>() {
+            @Override
+            protected Integer doInBackground() {
+                int made = 0;
+                // isCancelled() станет true, когда нажмут «Отмена»
+                for (int i = 0; i < count && !isCancelled(); i++) {
+                    tree.insert(PlaceGenerator.randomPlace(firstId + i));
+                    made++;
+                    setProgress((int) ((i + 1) * 100L / count)); // 100L: чтобы не было переполнения int
+                }
+                return made;
+            }
+
+            @Override
+            protected void done() {
+                finishTask();
+                if (isCancelled()) {
+                    JOptionPane.showMessageDialog(MainFrame.this, "Генерация отменена. Мест в дереве: " + tree.size());
+                } else {
+                    JOptionPane.showMessageDialog(MainFrame.this, "Создано мест: " + count);
+                }
+            }
+        };
+        startTask(task);
     }
 
     /** Новый номер: на 1 больше самого большого из имеющихся. */
