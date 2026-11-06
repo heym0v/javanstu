@@ -1,0 +1,24 @@
+type;id;name;category;latitude;longitude;website;phone
+NETWORK;1;Театр оперы и балета (НОВАТ);THEATRE;55.030522;82.92563;https://novat.ru;+7 383 227-15-37
+NETWORK;2;Театр «Красный факел»;THEATRE;55.028357;82.908232;https://www.red-torch.ru;+7 383 210-06-71
+NETWORK;3;Молодёжный театр «Глобус»;THEATRE;55.025275;82.928328;https://www.globus-nsk.ru;+7 383 223-88-41
+NETWORK;4;Театр «Старый дом»;THEATRE;55.00753;82.93911;https://old-house.ru;+7 383 266-25-92
+NETWORK;5;Новосибирский музыкальный театр;THEATRE;55.035342;82.926362;https://muzkom.ru;+7 383 224-49-03
+NETWORK;6;Драматический театр под руководством Сергея Афанасьева;THEATRE;55.026697;82.918557;https://ngdt.su;+7 383 309-23-97
+NETWORK;7;Новосибирский краеведческий музей;MUSEUM;55.028815;82.920267;https://youmuseum.ru;+7 383 227-15-43
+NETWORK;8;Новосибирский художественный музей;MUSEUM;55.021833;82.921795;https://www.nsartmuseum.ru;+7 383 223-53-31
+MODERATED;9;Музей железнодорожной техники;MUSEUM;54.869157;83.076008;;
+NETWORK;10;Центральный парк;PARK;55.035112;82.923529;https://parkigoroda-nsk.ru;+7 383 222-08-07
+PLACE;11;Центральный сибирский ботанический сад;PARK;54.82583;83.1094;;
+NETWORK;12;Новосибирский зоопарк им. Р. А. Шило;OTHER;55.056614;82.88892;https://zoonovosib.ru;+7 383 388-72-58
+NETWORK;13;НГТУ (пр. Карла Маркса, 20);EDUCATION;54.987621;82.906529;https://www.nstu.ru;+7 383 319-59-99
+NETWORK;14;НГУ (ул. Пирогова, 1);EDUCATION;54.843466;83.088789;https://nsu.ru;
+NETWORK;15;Отель DoubleTree by Hilton;HOTEL;55.026352;82.928285;http://hilton-nsk.ru;+7 383 362-21-05
+PLACE;16;Ресторан «Paris» (в отеле DoubleTree by Hilton);RESTAURANT;55.026352;82.928285;;
+PLACE;17;Кофейня «Кардамон»;CAFE;55.025825;82.915198;;
+NETWORK;18;ТРЦ «Мега»;SHOP;54.963944;82.935794;https://mega.ru/novosibirsk;8 800 707-10-44
+NETWORK;19;ТРЦ «Аура»;SHOP;55.028069;82.936614;https://aura.planeta-mall.ru;
+MODERATED;20;ТРЦ «Галерея Новосибирск»;SHOP;55.043868;82.922459;;
+PLACE;21;Вокзал Новосибирск-Главный;OTHER;55.0358;82.9;;
+MODERATED;22;Большой Новосибирский планетарий;OTHER;54.9809;83.0352;;
+MODERATED;23;Кинотеатр «Победа»;OTHER;55.02916;82.9148;;
