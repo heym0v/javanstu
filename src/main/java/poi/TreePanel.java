@@ -53,6 +53,8 @@ public class TreePanel extends JPanel {
         g.setColor(highlighted ? Color.RED : new Color(150, 200, 255));
         g.fillOval(x - RADIUS, y - RADIUS, 2 * RADIUS, 2 * RADIUS);
         g.setColor(Color.BLACK);
-        g.drawString(String.valueOf(node.value.getId()), x - RADIUS + 3, y + 5);
+        String text = String.valueOf(node.value.getId());
+        int textWidth = g.getFontMetrics().stringWidth(text);
+        g.drawString(text, x - textWidth / 2, y + 5); // номер по центру кружка
     }
 }
