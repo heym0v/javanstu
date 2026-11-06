@@ -1,0 +1,14 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+// Запуск программы: ./gradlew run
+application {
+    mainClass = 'poi.Main'
+}
+
+// Чтобы русские буквы в коде читались правильно
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
