@@ -118,6 +118,43 @@ public class KdTree<T extends Place> {
         }
     }
 
+    /** Все места дерева в одном массиве (обход: узел, потом левое, потом правое). */
+    public SimpleArray<T> toArray() {
+        SimpleArray<T> result = new SimpleArray<>();
+        collect(root, result);
+        return result;
+    }
+
+    private void collect(Node<T> node, SimpleArray<T> result) {
+        if (node == null) {
+            return;
+        }
+        result.add(node.value);
+        collect(node.left, result);
+        collect(node.right, result);
+    }
+
+    /**
+     * Удаление места. Самый простой способ: собрать все места,
+     * очистить дерево и вставить заново все, кроме удаляемого.
+     * Это O(n log n), зато код короткий и всегда правильный.
+     */
+    public boolean remove(T item) {
+        SimpleArray<T> all = toArray();
+        if (!all.contains(item)) {
+            return false;
+        }
+        root = null;
+        size = 0;
+        for (int i = 0; i < all.size(); i++) {
+            if (all.get(i) != item) {
+                insert(all.get(i));
+            }
+        }
+        visited = new SimpleArray<>();
+        return true;
+    }
+
     public int size() {
         return size;
     }
