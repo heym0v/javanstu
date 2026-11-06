@@ -23,3 +23,9 @@ tasks.register('benchmark', JavaExec) {
 tasks.withType(JavaExec).configureEach {
     jvmArgs '-Dstdout.encoding=UTF-8'
 }
+
+// ЛР 2: демонстрация гонки потоков — ./gradlew raceDemo
+tasks.register('raceDemo', JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'poi.experiment.RaceDemo'
+}
