@@ -1,12 +1,11 @@
 package poi;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Чтение и запись мест в CSV-файл.
@@ -77,36 +76,26 @@ public class CsvFile {
                 + SEPARATOR + website + SEPARATOR + phone;
     }
 
-    /**
-     * Читает весь файл. Битые строки пропускаются, а описание ошибки
-     * попадает в список errors, чтобы окно показало его пользователю.
-     * IOException (файла нет, нет доступа) пробрасываем наверх — его покажет окно.
-     */
-    public static ArrayList<Place> load(File file, ArrayList<String> errors) throws IOException {
-        List<String> lines = Files.readAllLines(file.toPath(), StandardCharsets.UTF_8);
-        ArrayList<Place> places = new ArrayList<>();
-        // i = 1: строку 0 пропускаем, это заголовок
-        for (int i = 1; i < lines.size(); i++) {
-            String line = lines.get(i);
-            if (line.isBlank()) {
-                continue; // пустые строки просто пропускаем
-            }
-            try {
-                places.add(parseLine(line));
-            } catch (CsvException e) {
-                errors.add("Строка " + (i + 1) + ": " + e.getCode() + " — " + e.getMessage());
+    /** Читает все строки файла в свой массив (без заголовка). */
+    public static SimpleArray<String> readLines(File file) throws IOException {
+        SimpleArray<String> lines = new SimpleArray<>();
+        // try-with-resources: файл закроется сам, даже если будет ошибка
+        try (BufferedReader in = new BufferedReader(new FileReader(file, StandardCharsets.UTF_8))) {
+            in.readLine(); // первая строка — заголовок, пропускаем
+            String line;
+            while ((line = in.readLine()) != null) {
+                lines.add(line);
             }
         }
-        return places;
+        return lines;
     }
 
     /** Записывает все места в файл: сначала заголовок, потом по строке на место. */
-    public static void save(File file, ArrayList<Place> places) throws IOException {
-        // try-with-resources: файл закроется сам, даже если будет ошибка
+    public static void save(File file, SimpleArray<Place> places) throws IOException {
         try (PrintWriter out = new PrintWriter(file, StandardCharsets.UTF_8)) {
             out.println(HEADER);
-            for (Place p : places) {
-                out.println(toLine(p));
+            for (int i = 0; i < places.size(); i++) {
+                out.println(toLine(places.get(i)));
             }
         }
     }

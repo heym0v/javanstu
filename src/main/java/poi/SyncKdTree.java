@@ -25,6 +25,9 @@ public class SyncKdTree<T extends Place> extends KdTree<T> {
     public synchronized boolean remove(T item) { return super.remove(item); }
 
     @Override
+    public synchronized void clear() { super.clear(); }
+
+    @Override
     public synchronized int size() { return super.size(); }
 
     @Override

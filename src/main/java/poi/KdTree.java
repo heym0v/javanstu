@@ -144,8 +144,7 @@ public class KdTree<T extends Place> {
         if (!all.contains(item)) {
             return false;
         }
-        root = null;
-        size = 0;
+        clear();
         for (int i = 0; i < all.size(); i++) {
             if (all.get(i) != item) {
                 insert(all.get(i));
@@ -153,6 +152,13 @@ public class KdTree<T extends Place> {
         }
         visited = new SimpleArray<>();
         return true;
+    }
+
+    /** Очистить дерево: без корня все узлы становятся недоступны, их уберёт сборщик мусора. */
+    public void clear() {
+        root = null;
+        size = 0;
+        visited = new SimpleArray<>();
     }
 
     public int size() {
