@@ -1,0 +1,16 @@
+{
+  "version" : 1,
+  "places" : [ {
+    "type" : "NETWORK",
+    "id" : 1,
+    "name" : "Театр оперы и балета (НОВАТ)",
+    "category" : "THEATRE",
+    "latitude" : 55.030522,
+    "longitude" : 82.92563,
+    "website" : "https://novat.ru",
+    "phone" : "+7 383 227-15-37"
+  }, {
+    "type" : "NETWORK",
+    "id" : 2,
+    "name" : "Театр «Красный факел»",
+    

@@ -1,0 +1,211 @@
+{
+  "version" : 2,
+  "places" : [ {
+    "type" : "NETWORK",
+    "id" : 1,
+    "name" : "Театр оперы и балета (НОВАТ)",
+    "category" : "THEATRE",
+    "latitude" : 55.030522,
+    "longitude" : 82.92563,
+    "website" : "https://novat.ru",
+    "phone" : "+7 383 227-15-37"
+  }, {
+    "type" : "NETWORK",
+    "id" : 2,
+    "name" : "Театр «Красный факел»",
+    "category" : "THEATRE",
+    "latitude" : 55.028357,
+    "longitude" : 82.908232,
+    "website" : "https://www.red-torch.ru",
+    "phone" : "+7 383 210-06-71"
+  }, {
+    "type" : "NETWORK",
+    "id" : 3,
+    "name" : "Молодёжный театр «Глобус»",
+    "category" : "THEATRE",
+    "latitude" : 55.025275,
+    "longitude" : 82.928328,
+    "website" : "https://www.globus-nsk.ru",
+    "phone" : "+7 383 223-88-41"
+  }, {
+    "type" : "NETWORK",
+    "id" : 4,
+    "name" : "Театр «Старый дом»",
+    "category" : "THEATRE",
+    "latitude" : 55.00753,
+    "longitude" : 82.93911,
+    "website" : "https://old-house.ru",
+    "phone" : "+7 383 266-25-92"
+  }, {
+    "type" : "NETWORK",
+    "id" : 5,
+    "name" : "Новосибирский музыкальный театр",
+    "category" : "THEATRE",
+    "latitude" : 55.035342,
+    "longitude" : 82.926362,
+    "website" : "https://muzkom.ru",
+    "phone" : "+7 383 224-49-03"
+  }, {
+    "type" : "NETWORK",
+    "id" : 6,
+    "name" : "Драматический театр под руководством Сергея Афанасьева",
+    "category" : "THEATRE",
+    "latitude" : 55.026697,
+    "longitude" : 82.918557,
+    "website" : "https://ngdt.su",
+    "phone" : "+7 383 309-23-97"
+  }, {
+    "type" : "NETWORK",
+    "id" : 7,
+    "name" : "Новосибирский краеведческий музей",
+    "category" : "MUSEUM",
+    "latitude" : 55.028815,
+    "longitude" : 82.920267,
+    "website" : "https://youmuseum.ru",
+    "phone" : "+7 383 227-15-43"
+  }, {
+    "type" : "NETWORK",
+    "id" : 8,
+    "name" : "Новосибирский художественный музей",
+    "category" : "MUSEUM",
+    "latitude" : 55.021833,
+    "longitude" : 82.921795,
+    "website" : "https://www.nsartmuseum.ru",
+    "phone" : "+7 383 223-53-31"
+  }, {
+    "type" : "MODERATED",
+    "id" : 9,
+    "name" : "Музей железнодорожной техники",
+    "category" : "MUSEUM",
+    "latitude" : 54.869157,
+    "longitude" : 83.076008,
+    "website" : "",
+    "phone" : ""
+  }, {
+    "type" : "NETWORK",
+    "id" : 10,
+    "name" : "Центральный парк",
+    "category" : "PARK",
+    "latitude" : 55.035112,
+    "longitude" : 82.923529,
+    "website" : "https://parkigoroda-nsk.ru",
+    "phone" : "+7 383 222-08-07"
+  }, {
+    "type" : "PLACE",
+    "id" : 11,
+    "name" : "Центральный сибирский ботанический сад",
+    "category" : "PARK",
+    "latitude" : 54.82583,
+    "longitude" : 83.1094,
+    "website" : "",
+    "phone" : ""
+  }, {
+    "type" : "NETWORK",
+    "id" : 12,
+    "name" : "Новосибирский зоопарк им. Р. А. Шило",
+    "category" : "OTHER",
+    "latitude" : 55.056614,
+    "longitude" : 82.88892,
+    "website" : "https://zoonovosib.ru",
+    "phone" : "+7 383 388-72-58"
+  }, {
+    "type" : "NETWORK",
+    "id" : 13,
+    "name" : "НГТУ (пр. Карла Маркса, 20)",
+    "category" : "EDUCATION",
+    "latitude" : 54.987621,
+    "longitude" : 82.906529,
+    "website" : "https://www.nstu.ru",
+    "phone" : "+7 383 319-59-99"
+  }, {
+    "type" : "NETWORK",
+    "id" : 14,
+    "name" : "НГУ (ул. Пирогова, 1)",
+    "category" : "EDUCATION",
+    "latitude" : 54.843466,
+    "longitude" : 83.088789,
+    "website" : "https://nsu.ru",
+    "phone" : ""
+  }, {
+    "type" : "NETWORK",
+    "id" : 15,
+    "name" : "Отель DoubleTree by Hilton",
+    "category" : "HOTEL",
+    "latitude" : 55.026352,
+    "longitude" : 82.928285,
+    "website" : "http://hilton-nsk.ru",
+    "phone" : "+7 383 362-21-05"
+  }, {
+    "type" : "PLACE",
+    "id" : 16,
+    "name" : "Ресторан «Paris» (в отеле DoubleTree by Hilton)",
+    "category" : "RESTAURANT",
+    "latitude" : 55.026352,
+    "longitude" : 82.928285,
+    "website" : "",
+    "phone" : ""
+  }, {
+    "type" : "PLACE",
+    "id" : 17,
+    "name" : "Кофейня «Кардамон»",
+    "category" : "CAFE",
+    "latitude" : 55.025825,
+    "longitude" : 82.915198,
+    "website" : "",
+    "phone" : ""
+  }, {
+    "type" : "NETWORK",
+    "id" : 18,
+    "name" : "ТРЦ «Мега»",
+    "category" : "SHOP",
+    "latitude" : 54.963944,
+    "longitude" : 82.935794,
+    "website" : "https://mega.ru/novosibirsk",
+    "phone" : "8 800 707-10-44"
+  }, {
+    "type" : "NETWORK",
+    "id" : 19,
+    "name" : "ТРЦ «Аура»",
+    "category" : "SHOP",
+    "latitude" : 55.028069,
+    "longitude" : 82.936614,
+    "website" : "https://aura.planeta-mall.ru",
+    "phone" : ""
+  }, {
+    "type" : "MODERATED",
+    "id" : 20,
+    "name" : "ТРЦ «Галерея Новосибирск»",
+    "category" : "SHOP",
+    "latitude" : 55.043868,
+    "longitude" : 82.922459,
+    "website" : "",
+    "phone" : ""
+  }, {
+    "type" : "PLACE",
+    "id" : 21,
+    "name" : "Вокзал Новосибирск-Главный",
+    "category" : "OTHER",
+    "latitude" : 55.0358,
+    "longitude" : 82.9,
+    "website" : "",
+    "phone" : ""
+  }, {
+    "type" : "MODERATED",
+    "id" : 22,
+    "name" : "Большой Новосибирский планетарий",
+    "category" : "OTHER",
+    "latitude" : 54.9809,
+    "longitude" : 83.0352,
+    "website" : "",
+    "phone" : ""
+  }, {
+    "type" : "MODERATED",
+    "id" : 23,
+    "name" : "Кинотеатр «Победа»",
+    "category" : "OTHER",
+    "latitude" : 55.02916,
+    "longitude" : 82.9148,
+    "website" : "",
+    "phone" : ""
+  } ]
+}
