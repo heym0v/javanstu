@@ -3,6 +3,26 @@ plugins {
     id 'application'
 }
 
+// ЛР 3: откуда скачивать библиотеки
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Jackson — библиотека для записи и чтения JSON
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.18.2'
+
+    // JUnit 5 — библиотека для тестов (нужна только тестам)
+    testImplementation platform('org.junit:junit-bom:5.11.4')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+// Запуск тестов: ./gradlew test
+test {
+    useJUnitPlatform()
+}
+
 // Запуск программы: ./gradlew run
 application {
     mainClass = 'poi.Main'
