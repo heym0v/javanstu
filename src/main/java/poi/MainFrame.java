@@ -1,15 +1,19 @@
 package poi;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.io.File;
+import java.io.IOException;
 
 /** Главное окно: таблица мест, рисунок дерева и кнопки. */
 public class MainFrame extends JFrame {
     private static final String[] COLUMNS =
             {"Тип", "ID", "Название", "Категория", "Широта", "Долгота", "Сайт", "Телефон"};
     private static final int MAX_LINES_IN_DIALOG = 20; // длинные списки в окне сообщения обрезаем
+    // ЛР 3: форматы для экспорта и импорта. Окно знает о них только через интерфейс Serializer
+    private static final Serializer[] FORMATS = {new BinarySerializer(), new JsonSerializer()};
 
     // Главное хранилище — своё k-d дерево (защищённое от одновременного доступа потоков)
     private final SyncKdTree<Place> tree = new SyncKdTree<>();
@@ -45,6 +49,8 @@ public class MainFrame extends JFrame {
         JButton findButton = new JButton("Найти");
         JButton rangeButton = new JButton("В прямоугольнике");
         JButton generateButton = new JButton("Сгенерировать");
+        JButton exportButton = new JButton("Экспорт");
+        JButton importButton = new JButton("Импорт");
         loadButton.addActionListener(e -> loadFile());
         saveButton.addActionListener(e -> saveFile());
         addButton.addActionListener(e -> addPlace());
@@ -53,6 +59,8 @@ public class MainFrame extends JFrame {
         findButton.addActionListener(e -> findPlace());
         rangeButton.addActionListener(e -> findInRectangle());
         generateButton.addActionListener(e -> generatePlaces());
+        exportButton.addActionListener(e -> exportFile());
+        importButton.addActionListener(e -> importFile());
         cancelButton.addActionListener(e -> currentTask.cancel(false));
         editButton.setEnabled(false);
         cancelButton.setEnabled(false);
@@ -66,6 +74,8 @@ public class MainFrame extends JFrame {
         buttons.add(findButton);
         buttons.add(rangeButton);
         buttons.add(generateButton);
+        buttons.add(exportButton);
+        buttons.add(importButton);
 
         // Нижняя строка: полоса прогресса и кнопка отмены фоновой задачи
         JPanel bottom = new JPanel(new BorderLayout());
@@ -80,7 +90,7 @@ public class MainFrame extends JFrame {
         add(buttons, BorderLayout.NORTH);
         add(split, BorderLayout.CENTER);
         add(bottom, BorderLayout.SOUTH);
-        setSize(1350, 650);
+        setSize(1450, 650);
         setLocationRelativeTo(null); // окно по центру экрана
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
@@ -211,6 +221,77 @@ public class MainFrame extends JFrame {
             JOptionPane.showMessageDialog(this, "Сохранено мест: " + tree.size());
         } catch (Exception e) {
             showError("Не удалось сохранить файл: " + e.getMessage());
+        }
+    }
+
+    /** ЛР 3. Спрашивает формат файла. Возвращает null, если окно закрыли. */
+    private Serializer askFormat(String title) {
+        String[] names = new String[FORMATS.length];
+        for (int i = 0; i < FORMATS.length; i++) {
+            names[i] = FORMATS[i].getName();
+        }
+        int choice = JOptionPane.showOptionDialog(this, "Выберите формат файла", title,
+                JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, names, names[0]);
+        if (choice < 0) {
+            return null;
+        }
+        return FORMATS[choice];
+    }
+
+    /** ЛР 3. Диалог выбора файла: показывает только файлы с расширением формата. */
+    private JFileChooser makeChooser(Serializer format) {
+        JFileChooser chooser = new JFileChooser(new File("data"));
+        chooser.setFileFilter(new FileNameExtensionFilter(format.getName(), format.getExtension()));
+        return chooser;
+    }
+
+    /** ЛР 3. Экспорт всех мест в бинарный или JSON-файл. */
+    private void exportFile() {
+        Serializer format = askFormat("Экспорт");
+        if (format == null) {
+            return;
+        }
+        JFileChooser chooser = makeChooser(format);
+        chooser.setSelectedFile(new File("places." + format.getExtension()));
+        if (chooser.showSaveDialog(this) != JFileChooser.APPROVE_OPTION) {
+            return;
+        }
+        try {
+            format.save(chooser.getSelectedFile(), tree.toArray());
+            JOptionPane.showMessageDialog(this, "Экспортировано мест: " + tree.size());
+        } catch (IOException e) {
+            showError("Не удалось записать файл: " + e.getMessage());
+        }
+    }
+
+    /** ЛР 3. Импорт мест из файла. Если файл битый, старые данные остаются как были. */
+    private void importFile() {
+        if (currentTask != null) {
+            showError("Дождитесь окончания текущей операции или отмените её");
+            return;
+        }
+        Serializer format = askFormat("Импорт");
+        if (format == null) {
+            return;
+        }
+        JFileChooser chooser = makeChooser(format);
+        if (chooser.showOpenDialog(this) != JFileChooser.APPROVE_OPTION) {
+            return;
+        }
+        try {
+            // Сначала читаем весь файл, и только если он целый — меняем дерево
+            SimpleArray<Place> places = format.load(chooser.getSelectedFile());
+            tree.clear();
+            for (int i = 0; i < places.size(); i++) {
+                tree.insert(places.get(i));
+            }
+            refreshTable();
+            JOptionPane.showMessageDialog(this, "Импортировано мест: " + places.size());
+        } catch (FormatException e) {
+            showError("Файл испорчен (" + e.getCode() + "): " + e.getMessage()
+                    + "\nДанные в таблице не изменились");
+        } catch (IOException e) {
+            showError("Не удалось прочитать файл: " + e.getMessage());
         }
     }
 
