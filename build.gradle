@@ -49,3 +49,9 @@ tasks.register('raceDemo', JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     mainClass = 'poi.experiment.RaceDemo'
 }
+
+// ЛР 3: сравнение бинарного формата и JSON — ./gradlew formatBenchmark
+tasks.register('formatBenchmark', JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'poi.experiment.FormatBenchmark'
+}
