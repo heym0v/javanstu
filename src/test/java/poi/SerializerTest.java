@@ -3,9 +3,13 @@ package poi;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -86,5 +90,64 @@ public class SerializerTest {
         String text = TestFiles.read(file);
         assertTrue(text.contains("\"version\" : 1"));
         assertTrue(text.contains("Оперный театр"));
+    }
+
+    // ---------- Отрицательные тесты: файл битый -> FormatException с нужным кодом ----------
+    // assertThrows(класс, код) проверяет, что код БРОСИЛ это исключение, и возвращает его
+
+    @Test
+    void binaryWrongVersion() throws Exception {
+        File file = new File(dir, "v99.bin");
+        try (DataOutputStream out = new DataOutputStream(new FileOutputStream(file))) {
+            out.writeInt(BinarySerializer.MAGIC);
+            out.writeInt(99); // версия из «будущего»
+            out.writeInt(0);
+        }
+        FormatException e = assertThrows(FormatException.class, () -> new BinarySerializer().load(file));
+        assertEquals(ErrorCode.UNSUPPORTED_VERSION, e.getCode());
+    }
+
+    @Test
+    void binaryTruncatedFile() throws Exception {
+        File file = new File(dir, "cut.bin");
+        new BinarySerializer().save(file, samplePlaces());
+        byte[] bytes = TestFiles.readBytes(file);
+        TestFiles.writeBytes(file, Arrays.copyOf(bytes, bytes.length - 10)); // отрезаем хвост
+        FormatException e = assertThrows(FormatException.class, () -> new BinarySerializer().load(file));
+        assertEquals(ErrorCode.BROKEN_FILE, e.getCode());
+    }
+
+    @Test
+    void binaryForeignFile() throws Exception {
+        File file = new File(dir, "text.bin");
+        TestFiles.write(file, "это просто текст, а не наш формат");
+        FormatException e = assertThrows(FormatException.class, () -> new BinarySerializer().load(file));
+        assertEquals(ErrorCode.BROKEN_FILE, e.getCode());
+    }
+
+    @Test
+    void jsonBrokenText() throws Exception {
+        File file = new File(dir, "broken.json");
+        TestFiles.write(file, "{ \"version\" : 1, \"places\" : [ { \"id\" : ");
+        FormatException e = assertThrows(FormatException.class, () -> new JsonSerializer().load(file));
+        assertEquals(ErrorCode.BROKEN_FILE, e.getCode());
+    }
+
+    @Test
+    void jsonWrongVersion() throws Exception {
+        File file = new File(dir, "v2.json");
+        TestFiles.write(file, "{ \"version\" : 2, \"places\" : [] }");
+        FormatException e = assertThrows(FormatException.class, () -> new JsonSerializer().load(file));
+        assertEquals(ErrorCode.UNSUPPORTED_VERSION, e.getCode());
+    }
+
+    @Test
+    void jsonUnknownCategory() throws Exception {
+        File file = new File(dir, "category.json");
+        new JsonSerializer().save(file, samplePlaces());
+        // портим файл: заменяем категорию на несуществующую
+        TestFiles.write(file, TestFiles.read(file).replace("THEATRE", "CINEMA"));
+        FormatException e = assertThrows(FormatException.class, () -> new JsonSerializer().load(file));
+        assertEquals(ErrorCode.UNKNOWN_CATEGORY, e.getCode());
     }
 }

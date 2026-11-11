@@ -15,4 +15,12 @@ public class TestFiles {
     public static void write(File file, String text) throws IOException {
         Files.writeString(file.toPath(), text, StandardCharsets.UTF_8);
     }
+
+    public static byte[] readBytes(File file) throws IOException {
+        return Files.readAllBytes(file.toPath());
+    }
+
+    public static void writeBytes(File file, byte[] bytes) throws IOException {
+        Files.write(file.toPath(), bytes);
+    }
 }
