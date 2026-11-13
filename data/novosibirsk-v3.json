@@ -1,5 +1,5 @@
 {
-  "version" : 2,
+  "schema_version" : 3,
   "places" : [ {
     "type" : "NETWORK",
     "id" : 1,
@@ -8,7 +8,9 @@
     "latitude" : 55.030522,
     "longitude" : 82.92563,
     "website" : "https://novat.ru",
-    "phone" : "+7 383 227-15-37"
+    "phone" : "+7 383 227-15-37",
+    "rating" : 4.7,
+    "note" : "пример заметки"
   }, {
     "type" : "NETWORK",
     "id" : 2,
@@ -17,7 +19,9 @@
     "latitude" : 55.028357,
     "longitude" : 82.908232,
     "website" : "https://www.red-torch.ru",
-    "phone" : "+7 383 210-06-71"
+    "phone" : "+7 383 210-06-71",
+    "rating" : 4.4,
+    "note" : ""
   }, {
     "type" : "NETWORK",
     "id" : 3,
@@ -26,7 +30,9 @@
     "latitude" : 55.025275,
     "longitude" : 82.928328,
     "website" : "https://www.globus-nsk.ru",
-    "phone" : "+7 383 223-88-41"
+    "phone" : "+7 383 223-88-41",
+    "rating" : 4.1,
+    "note" : ""
   }, {
     "type" : "NETWORK",
     "id" : 4,
@@ -35,7 +41,9 @@
     "latitude" : 55.00753,
     "longitude" : 82.93911,
     "website" : "https://old-house.ru",
-    "phone" : "+7 383 266-25-92"
+    "phone" : "+7 383 266-25-92",
+    "rating" : 4.8,
+    "note" : ""
   }, {
     "type" : "NETWORK",
     "id" : 5,
@@ -44,7 +52,9 @@
     "latitude" : 55.035342,
     "longitude" : 82.926362,
     "website" : "https://muzkom.ru",
-    "phone" : "+7 383 224-49-03"
+    "phone" : "+7 383 224-49-03",
+    "rating" : 4.5,
+    "note" : ""
   }, {
     "type" : "NETWORK",
     "id" : 6,
@@ -53,7 +63,9 @@
     "latitude" : 55.026697,
     "longitude" : 82.918557,
     "website" : "https://ngdt.su",
-    "phone" : "+7 383 309-23-97"
+    "phone" : "+7 383 309-23-97",
+    "rating" : 4.2,
+    "note" : "пример заметки"
   }, {
     "type" : "NETWORK",
     "id" : 7,
@@ -62,7 +74,9 @@
     "latitude" : 55.028815,
     "longitude" : 82.920267,
     "website" : "https://youmuseum.ru",
-    "phone" : "+7 383 227-15-43"
+    "phone" : "+7 383 227-15-43",
+    "rating" : 4.9,
+    "note" : ""
   }, {
     "type" : "NETWORK",
     "id" : 8,
@@ -71,7 +85,9 @@
     "latitude" : 55.021833,
     "longitude" : 82.921795,
     "website" : "https://www.nsartmuseum.ru",
-    "phone" : "+7 383 223-53-31"
+    "phone" : "+7 383 223-53-31",
+    "rating" : 4.6,
+    "note" : ""
   }, {
     "type" : "MODERATED",
     "id" : 9,
@@ -80,7 +96,9 @@
     "latitude" : 54.869157,
     "longitude" : 83.076008,
     "website" : "",
-    "phone" : ""
+    "phone" : "",
+    "rating" : 0.0,
+    "note" : ""
   }, {
     "type" : "NETWORK",
     "id" : 10,
@@ -89,7 +107,9 @@
     "latitude" : 55.035112,
     "longitude" : 82.923529,
     "website" : "https://parkigoroda-nsk.ru",
-    "phone" : "+7 383 222-08-07"
+    "phone" : "+7 383 222-08-07",
+    "rating" : 4.0,
+    "note" : ""
   }, {
     "type" : "PLACE",
     "id" : 11,
@@ -98,7 +118,9 @@
     "latitude" : 54.82583,
     "longitude" : 83.1094,
     "website" : "",
-    "phone" : ""
+    "phone" : "",
+    "rating" : 0.0,
+    "note" : ""
   }, {
     "type" : "NETWORK",
     "id" : 12,
@@ -107,7 +129,9 @@
     "latitude" : 55.056614,
     "longitude" : 82.88892,
     "website" : "https://zoonovosib.ru",
-    "phone" : "+7 383 388-72-58"
+    "phone" : "+7 383 388-72-58",
+    "rating" : 4.4,
+    "note" : ""
   }, {
     "type" : "NETWORK",
     "id" : 13,
@@ -116,7 +140,9 @@
     "latitude" : 54.987621,
     "longitude" : 82.906529,
     "website" : "https://www.nstu.ru",
-    "phone" : "+7 383 319-59-99"
+    "phone" : "+7 383 319-59-99",
+    "rating" : 4.1,
+    "note" : ""
   }, {
     "type" : "NETWORK",
     "id" : 14,
@@ -125,7 +151,9 @@
     "latitude" : 54.843466,
     "longitude" : 83.088789,
     "website" : "https://nsu.ru",
-    "phone" : ""
+    "phone" : "",
+    "rating" : 4.8,
+    "note" : ""
   }, {
     "type" : "NETWORK",
     "id" : 15,
@@ -134,7 +162,9 @@
     "latitude" : 55.026352,
     "longitude" : 82.928285,
     "website" : "http://hilton-nsk.ru",
-    "phone" : "+7 383 362-21-05"
+    "phone" : "+7 383 362-21-05",
+    "rating" : 4.5,
+    "note" : ""
   }, {
     "type" : "PLACE",
     "id" : 16,
@@ -143,7 +173,9 @@
     "latitude" : 55.026352,
     "longitude" : 82.928285,
     "website" : "",
-    "phone" : ""
+    "phone" : "",
+    "rating" : 0.0,
+    "note" : ""
   }, {
     "type" : "PLACE",
     "id" : 17,
@@ -152,7 +184,9 @@
     "latitude" : 55.025825,
     "longitude" : 82.915198,
     "website" : "",
-    "phone" : ""
+    "phone" : "",
+    "rating" : 0.0,
+    "note" : ""
   }, {
     "type" : "NETWORK",
     "id" : 18,
@@ -161,7 +195,9 @@
     "latitude" : 54.963944,
     "longitude" : 82.935794,
     "website" : "https://mega.ru/novosibirsk",
-    "phone" : "8 800 707-10-44"
+    "phone" : "8 800 707-10-44",
+    "rating" : 4.6,
+    "note" : ""
   }, {
     "type" : "NETWORK",
     "id" : 19,
@@ -170,7 +206,9 @@
     "latitude" : 55.028069,
     "longitude" : 82.936614,
     "website" : "https://aura.planeta-mall.ru",
-    "phone" : ""
+    "phone" : "",
+    "rating" : 4.3,
+    "note" : ""
   }, {
     "type" : "MODERATED",
     "id" : 20,
@@ -179,7 +217,9 @@
     "latitude" : 55.043868,
     "longitude" : 82.922459,
     "website" : "",
-    "phone" : ""
+    "phone" : "",
+    "rating" : 0.0,
+    "note" : ""
   }, {
     "type" : "PLACE",
     "id" : 21,
@@ -188,7 +228,9 @@
     "latitude" : 55.0358,
     "longitude" : 82.9,
     "website" : "",
-    "phone" : ""
+    "phone" : "",
+    "rating" : 0.0,
+    "note" : ""
   }, {
     "type" : "MODERATED",
     "id" : 22,
@@ -197,7 +239,9 @@
     "latitude" : 54.9809,
     "longitude" : 83.0352,
     "website" : "",
-    "phone" : ""
+    "phone" : "",
+    "rating" : 0.0,
+    "note" : ""
   }, {
     "type" : "MODERATED",
     "id" : 23,
@@ -206,6 +250,8 @@
     "latitude" : 55.02916,
     "longitude" : 82.9148,
     "website" : "",
-    "phone" : ""
+    "phone" : "",
+    "rating" : 0.0,
+    "note" : ""
   } ]
 }
