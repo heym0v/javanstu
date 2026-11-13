@@ -10,7 +10,7 @@ import java.io.IOException;
 /** Главное окно: таблица мест, рисунок дерева и кнопки. */
 public class MainFrame extends JFrame {
     private static final String[] COLUMNS =
-            {"Тип", "ID", "Название", "Категория", "Широта", "Долгота", "Сайт", "Телефон"};
+            {"Тип", "ID", "Название", "Категория", "Широта", "Долгота", "Сайт", "Телефон", "Рейтинг", "Заметка"};
     private static final int MAX_LINES_IN_DIALOG = 20; // длинные списки в окне сообщения обрезаем
     // ЛР 3: форматы для экспорта и импорта. Окно знает о них только через интерфейс Serializer
     private static final Serializer[] FORMATS = {new BinarySerializer(), new JsonSerializer()};
@@ -109,7 +109,7 @@ public class MainFrame extends JFrame {
                 phone = np.getPhone();
             }
             rows[i] = new Object[]{p.getTypeName(), p.getId(), p.getName(), p.getCategory(),
-                    p.getLatitude(), p.getLongitude(), website, phone};
+                    p.getLatitude(), p.getLongitude(), website, phone, p.getRating(), p.getNote()};
         }
         tableModel.setDataVector(rows, COLUMNS); // все строки разом — быстро даже для 100 000
         treePanel.repaint();
@@ -463,6 +463,8 @@ public class MainFrame extends JFrame {
         JTextField lonField = new JTextField(String.valueOf(place.getLongitude()));
         JTextField websiteField = new JTextField(place.getWebsite());
         JTextField phoneField = new JTextField(place.getPhone());
+        JTextField ratingField = new JTextField(String.valueOf(place.getRating())); // ЛР 4
+        JTextField noteField = new JTextField(place.getNote());
 
         // Сетка: слева подписи, справа поля
         JPanel panel = new JPanel(new GridLayout(0, 2));
@@ -478,6 +480,10 @@ public class MainFrame extends JFrame {
         panel.add(websiteField);
         panel.add(new JLabel("Телефон:"));
         panel.add(phoneField);
+        panel.add(new JLabel("Рейтинг (0–5):"));
+        panel.add(ratingField);
+        panel.add(new JLabel("Заметка:"));
+        panel.add(noteField);
 
         int answer = JOptionPane.showConfirmDialog(this, panel, title, JOptionPane.OK_CANCEL_OPTION);
         if (answer != JOptionPane.OK_OPTION) {
@@ -485,11 +491,17 @@ public class MainFrame extends JFrame {
         }
         double lat;
         double lon;
+        double rating;
         try {
             lat = Double.parseDouble(latField.getText());
             lon = Double.parseDouble(lonField.getText());
+            rating = Double.parseDouble(ratingField.getText());
         } catch (NumberFormatException e) {
-            showError("Широта и долгота должны быть числами, например 55.03");
+            showError("Широта, долгота и рейтинг должны быть числами, например 55.03");
+            return false;
+        }
+        if (!PlaceData.isGoodRating(rating)) {
+            showError("Рейтинг должен быть от 0 до " + Place.MAX_RATING);
             return false;
         }
         place.setName(nameField.getText());
@@ -498,6 +510,8 @@ public class MainFrame extends JFrame {
         place.setLongitude(lon);
         place.setWebsite(websiteField.getText());
         place.setPhone(phoneField.getText());
+        place.setRating(rating);
+        place.setNote(noteField.getText());
         return true;
     }
 
