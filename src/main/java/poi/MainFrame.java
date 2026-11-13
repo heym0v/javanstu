@@ -264,7 +264,10 @@ public class MainFrame extends JFrame {
         }
     }
 
-    /** ЛР 3. Импорт мест из файла. Если файл битый, старые данные остаются как были. */
+    /**
+     * ЛР 3. Импорт мест из файла. Если файл битый, старые данные остаются как были.
+     * ЛР 4. Если файл старой версии — сначала спрашиваем, мигрировать ли его.
+     */
     private void importFile() {
         if (currentTask != null) {
             showError("Дождитесь окончания текущей операции или отмените её");
@@ -278,9 +281,20 @@ public class MainFrame extends JFrame {
         if (chooser.showOpenDialog(this) != JFileChooser.APPROVE_OPTION) {
             return;
         }
+        File file = chooser.getSelectedFile();
         try {
+            int version = format.readVersion(file);
+            if (version < Serializer.VERSION) {
+                int answer = JOptionPane.showConfirmDialog(this,
+                        "Файл версии " + version + ". Мигрировать до " + Serializer.VERSION + "?\n"
+                                + "Новые поля получат значения по умолчанию: рейтинг 0.0, заметка пустая.",
+                        "Старая версия файла", JOptionPane.YES_NO_OPTION);
+                if (answer != JOptionPane.YES_OPTION) {
+                    return; // отказались — ничего не загружаем, таблица не меняется
+                }
+            }
             // Сначала читаем весь файл, и только если он целый — меняем дерево
-            SimpleArray<Place> places = format.load(chooser.getSelectedFile());
+            SimpleArray<Place> places = format.load(file);
             tree.clear();
             for (int i = 0; i < places.size(); i++) {
                 tree.insert(places.get(i));
@@ -288,7 +302,7 @@ public class MainFrame extends JFrame {
             refreshTable();
             JOptionPane.showMessageDialog(this, "Импортировано мест: " + places.size());
         } catch (FormatException e) {
-            showError("Файл испорчен (" + e.getCode() + "): " + e.getMessage()
+            showError("Файл не прочитан (" + e.getCode() + "): " + e.getMessage()
                     + "\nДанные в таблице не изменились");
         } catch (IOException e) {
             showError("Не удалось прочитать файл: " + e.getMessage());
