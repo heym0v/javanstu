@@ -7,6 +7,13 @@ import java.nio.file.Files;
 
 /** Вспомогательные методы для тестов: прочитать и записать файл целиком. */
 public class TestFiles {
+    // ЛР 4: готовые файлы старых версий («фикстуры»). Тесты запускаются из папки проекта
+    private static final File FIXTURES = new File("src/test/resources/migration");
+
+    /** Файл-образец из папки src/test/resources/migration. */
+    public static File fixture(String name) {
+        return new File(FIXTURES, name);
+    }
 
     public static String read(File file) throws IOException {
         return Files.readString(file.toPath(), StandardCharsets.UTF_8);

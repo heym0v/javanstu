@@ -1,0 +1,34 @@
+{
+  "schema_version" : 2,
+  "places" : [ {
+    "type" : "PLACE",
+    "id" : 1,
+    "name" : "Оперный театр",
+    "category" : "THEATRE",
+    "latitude" : 55.0302,
+    "longitude" : 82.9238,
+    "website" : "",
+    "phone" : "",
+    "rating" : 4.8
+  }, {
+    "type" : "MODERATED",
+    "id" : 2,
+    "name" : "Кофейня у метро",
+    "category" : "CAFE",
+    "latitude" : 55.0415,
+    "longitude" : 82.9346,
+    "website" : "",
+    "phone" : "",
+    "rating" : 3.5
+  }, {
+    "type" : "NETWORK",
+    "id" : 3,
+    "name" : "Музей Солнца",
+    "category" : "MUSEUM",
+    "latitude" : 55.0124,
+    "longitude" : 82.9473,
+    "website" : "sunmuseum.ru",
+    "phone" : "+7 383 000-00-00",
+    "rating" : 4.5
+  } ]
+}
