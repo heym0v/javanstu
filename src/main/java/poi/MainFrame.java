@@ -245,10 +245,42 @@ public class MainFrame extends JFrame {
         return chooser;
     }
 
-    /** ЛР 3. Экспорт всех мест в бинарный или JSON-файл. */
+    /**
+     * ЛР 4. Спрашивает, в какую версию сохранить. Если в старую — предупреждает о потере полей.
+     * Возвращает версию или -1, если пользователь передумал.
+     */
+    private int askVersion() {
+        String[] names = new String[Serializer.VERSION];
+        for (int v = Serializer.VERSION; v >= 1; v--) {
+            names[Serializer.VERSION - v] = "Версия " + v; // сверху самая новая
+        }
+        names[0] += " (текущая)";
+        int choice = JOptionPane.showOptionDialog(this, "В какую версию формата сохранить?", "Экспорт",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, names, names[0]);
+        if (choice < 0) {
+            return -1;
+        }
+        int version = Serializer.VERSION - choice;
+        String lost = Migrator.lostFields(version);
+        if (!lost.isEmpty()) {
+            int answer = JOptionPane.showConfirmDialog(this,
+                    "В версии " + version + " нет полей: " + lost + ".\nЭти данные НЕ попадут в файл. Продолжить?",
+                    "Потеря данных", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+            if (answer != JOptionPane.YES_OPTION) {
+                return -1;
+            }
+        }
+        return version;
+    }
+
+    /** ЛР 3. Экспорт всех мест в бинарный или JSON-файл. ЛР 4: в любую версию формата. */
     private void exportFile() {
         Serializer format = askFormat("Экспорт");
         if (format == null) {
+            return;
+        }
+        int version = askVersion();
+        if (version < 0) {
             return;
         }
         JFileChooser chooser = makeChooser(format);
@@ -257,8 +289,8 @@ public class MainFrame extends JFrame {
             return;
         }
         try {
-            format.save(chooser.getSelectedFile(), tree.toArray());
-            JOptionPane.showMessageDialog(this, "Экспортировано мест: " + tree.size());
+            format.save(chooser.getSelectedFile(), tree.toArray(), version);
+            JOptionPane.showMessageDialog(this, "Экспортировано мест: " + tree.size() + " (версия " + version + ")");
         } catch (IOException e) {
             showError("Не удалось записать файл: " + e.getMessage());
         }
