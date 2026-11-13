@@ -12,6 +12,12 @@ public class ModeratedPlace extends Place {
         super(id, name, category, latitude, longitude); // вызов конструктора Place
     }
 
+    /** ЛР 4: с рейтингом и заметкой (нужен при чтении из файла). */
+    public ModeratedPlace(int id, String name, Category category, double latitude, double longitude,
+                          double rating, String note) {
+        super(id, name, category, latitude, longitude, rating, note);
+    }
+
     @Override
     public String getType() {
         return "MODERATED";

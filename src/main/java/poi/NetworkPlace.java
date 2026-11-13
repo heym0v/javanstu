@@ -15,6 +15,14 @@ public class NetworkPlace extends Place implements Editable {
         this.phone = phone;
     }
 
+    /** ЛР 4: с рейтингом и заметкой. */
+    public NetworkPlace(int id, String name, Category category, double latitude, double longitude,
+                        String website, String phone, double rating, String note) {
+        super(id, name, category, latitude, longitude, rating, note);
+        this.website = website;
+        this.phone = phone;
+    }
+
     public String getWebsite() { return website; }
     public String getPhone() { return phone; }
 
@@ -25,6 +33,8 @@ public class NetworkPlace extends Place implements Editable {
     public void setLongitude(double longitude) { this.longitude = longitude; }
     public void setWebsite(String website) { this.website = website; }
     public void setPhone(String phone) { this.phone = phone; }
+    public void setRating(double rating) { this.rating = rating; }
+    public void setNote(String note) { this.note = note; }
 
     @Override
     public String getType() {
