@@ -29,7 +29,7 @@ public class SerializerTest {
         places.add(new Place(1, "Оперный театр", Category.THEATRE, 55.0302, 82.9238));
         places.add(new ModeratedPlace(2, "Кофейня у метро", Category.CAFE, 55.0415, 82.9346));
         places.add(new NetworkPlace(3, "Музей Солнца", Category.MUSEUM, 55.0124, 82.9473,
-                "sunmuseum.ru", "+7 383 000-00-00"));
+                "sunmuseum.ru", "+7 383 000-00-00", 4.5, "вход бесплатный"));
         return places;
     }
 
@@ -45,6 +45,8 @@ public class SerializerTest {
             assertEquals(e.getCategory(), a.getCategory());
             assertEquals(e.getLatitude(), a.getLatitude());
             assertEquals(e.getLongitude(), a.getLongitude());
+            assertEquals(e.getRating(), a.getRating()); // ЛР 4
+            assertEquals(e.getNote(), a.getNote());
             if (e instanceof NetworkPlace) {
                 assertEquals(((NetworkPlace) e).getWebsite(), ((NetworkPlace) a).getWebsite());
                 assertEquals(((NetworkPlace) e).getPhone(), ((NetworkPlace) a).getPhone());
@@ -88,7 +90,7 @@ public class SerializerTest {
         File file = new File(dir, "test.json");
         new JsonSerializer().save(file, samplePlaces());
         String text = TestFiles.read(file);
-        assertTrue(text.contains("\"version\" : 1"));
+        assertTrue(text.contains("\"schema_version\" : 3")); // ЛР 4: текущая версия 3
         assertTrue(text.contains("Оперный театр"));
     }
 
@@ -104,7 +106,7 @@ public class SerializerTest {
             out.writeInt(0);
         }
         FormatException e = assertThrows(FormatException.class, () -> new BinarySerializer().load(file));
-        assertEquals(ErrorCode.UNSUPPORTED_VERSION, e.getCode());
+        assertEquals(ErrorCode.VERSION_TOO_NEW, e.getCode()); // ЛР 4: отдельный код для «будущей» версии
     }
 
     @Test
@@ -128,15 +130,15 @@ public class SerializerTest {
     @Test
     void jsonBrokenText() throws Exception {
         File file = new File(dir, "broken.json");
-        TestFiles.write(file, "{ \"version\" : 1, \"places\" : [ { \"id\" : ");
+        TestFiles.write(file, "{ \"schema_version\" : 3, \"places\" : [ { \"id\" : ");
         FormatException e = assertThrows(FormatException.class, () -> new JsonSerializer().load(file));
         assertEquals(ErrorCode.BROKEN_FILE, e.getCode());
     }
 
     @Test
     void jsonWrongVersion() throws Exception {
-        File file = new File(dir, "v2.json");
-        TestFiles.write(file, "{ \"version\" : 2, \"places\" : [] }");
+        File file = new File(dir, "v0.json");
+        TestFiles.write(file, "{ \"schema_version\" : 0, \"places\" : [] }"); // ЛР 4: версии 2 и 3 теперь правильные
         FormatException e = assertThrows(FormatException.class, () -> new JsonSerializer().load(file));
         assertEquals(ErrorCode.UNSUPPORTED_VERSION, e.getCode());
     }
