@@ -21,9 +21,21 @@ public interface Serializer {
     /** Расширение файла: "bin" или "json". */
     String getExtension();
 
-    /** Записывает все места в файл. */
-    void save(File file, SimpleArray<Place> places) throws IOException;
+    /** Записывает все места в файл текущей версии. */
+    default void save(File file, SimpleArray<Place> places) throws IOException {
+        save(file, places, VERSION); // default-метод: у всех форматов он одинаковый, писать его в каждом не нужно
+    }
 
-    /** Читает места из файла. Битый файл — FormatException, файла нет — IOException. */
+    /** ЛР 4. Записывает места в файл указанной версии (1, 2 или 3). Новые поля в старой версии теряются. */
+    void save(File file, SimpleArray<Place> places, int version) throws IOException;
+
+    /** ЛР 4. Только узнаёт версию файла, места не читает. Нужно, чтобы спросить про миграцию. */
+    int readVersion(File file) throws IOException, FormatException;
+
+    /**
+     * Читает места из файла любой версии от 1 до текущей.
+     * Старый файл сразу мигрирует до текущей версии.
+     * Битый файл — FormatException, файла нет — IOException.
+     */
     SimpleArray<Place> load(File file) throws IOException, FormatException;
 }

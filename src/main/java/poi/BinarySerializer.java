@@ -15,9 +15,12 @@ import java.io.UTFDataFormatException;
  * ЛР 3. Бинарный формат: числа и строки пишутся байтами, как они лежат в памяти.
  * Устройство файла:
  *   int    MAGIC   — «подпись» нашего формата, чтобы отличить его от чужих файлов
- *   int    VERSION — версия формата
+ *   int    VERSION — версия формата (ЛР 4: заголовок с версией)
  *   int    count   — сколько мест
  *   count раз: type, id, name, category, latitude, longitude, website, phone
+ *              + double rating (с версии 2)
+ *              + String note   (с версии 3)
+ * Версия 1 устроена точно как в ЛР 3, поэтому старая программа сможет её прочитать.
  */
 public class BinarySerializer implements Serializer {
     public static final int MAGIC = 0x504F4921; // байты 'P' 'O' 'I' '!'
@@ -33,12 +36,12 @@ public class BinarySerializer implements Serializer {
     }
 
     @Override
-    public void save(File file, SimpleArray<Place> places) throws IOException {
+    public void save(File file, SimpleArray<Place> places, int version) throws IOException {
         // DataOutputStream умеет писать int, double, String; Buffered — копит байты и пишет большими кусками
         try (DataOutputStream out = new DataOutputStream(
                 new BufferedOutputStream(new FileOutputStream(file)))) {
             out.writeInt(MAGIC);
-            out.writeInt(VERSION);
+            out.writeInt(version);
             out.writeInt(places.size());
             for (int i = 0; i < places.size(); i++) {
                 PlaceData d = PlaceData.from(places.get(i));
@@ -50,8 +53,32 @@ public class BinarySerializer implements Serializer {
                 out.writeDouble(d.longitude);
                 out.writeUTF(d.website);
                 out.writeUTF(d.phone);
+                // ЛР 4: новые поля пишем, только если они есть в этой версии
+                if (version >= 2) {
+                    out.writeDouble(d.rating);
+                }
+                if (version >= 3) {
+                    out.writeUTF(d.note);
+                }
             }
         }
+    }
+
+    @Override
+    public int readVersion(File file) throws IOException, FormatException {
+        try (DataInputStream in = new DataInputStream(new FileInputStream(file))) {
+            return readHeader(in);
+        } catch (EOFException e) {
+            throw new FormatException(ErrorCode.BROKEN_FILE, "файл слишком короткий");
+        }
+    }
+
+    /** Читает подпись и версию. Возвращает версию. */
+    private int readHeader(DataInputStream in) throws IOException, FormatException {
+        if (in.readInt() != MAGIC) {
+            throw new FormatException(ErrorCode.BROKEN_FILE, "это не файл нашего бинарного формата");
+        }
+        return in.readInt();
     }
 
     @Override
@@ -59,14 +86,8 @@ public class BinarySerializer implements Serializer {
         try (DataInputStream in = new DataInputStream(
                 new BufferedInputStream(new FileInputStream(file)))) {
             // Читать нужно строго в том же порядке, в каком писали
-            if (in.readInt() != MAGIC) {
-                throw new FormatException(ErrorCode.BROKEN_FILE, "это не файл нашего бинарного формата");
-            }
-            int version = in.readInt();
-            if (version != VERSION) {
-                throw new FormatException(ErrorCode.UNSUPPORTED_VERSION,
-                        "версия файла " + version + ", а программа понимает только " + VERSION);
-            }
+            int version = readHeader(in);
+            Migrator.checkVersion(version); // версия из «будущего» — сразу ошибка
             int count = in.readInt();
             if (count < 0) {
                 throw new FormatException(ErrorCode.BROKEN_FILE, "отрицательное количество мест: " + count);
@@ -82,6 +103,14 @@ public class BinarySerializer implements Serializer {
                 d.longitude = in.readDouble();
                 d.website = in.readUTF();
                 d.phone = in.readUTF();
+                // ЛР 4: сколько полей читать — зависит от версии файла
+                if (version >= 2) {
+                    d.rating = in.readDouble();
+                }
+                if (version >= 3) {
+                    d.note = in.readUTF();
+                }
+                Migrator.migrate(d, version); // старое место дотягиваем до текущей версии
                 places.add(d.toPlace());
             }
             return places;
